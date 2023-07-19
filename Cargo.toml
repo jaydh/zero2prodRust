@@ -26,6 +26,9 @@ sqlx = { version = "0.6", default-features = false, features = ["runtime-actix-r
 tokio = { version = "1", features = ["macros", "rt-multi-thread"] }
 tracing = { version = "0.1", features = ["log"] }
 uuid = { version = "1", features = ["v4", "serde"] }
+tracing-bunyan-formatter = "0.3"
+tracing-subscriber = { version = "0.3", features = ["registry", "env-filter"] }
+tracing-log = "0.1"
 
 [dev-dependencies]
 reqwest = "0.11"
