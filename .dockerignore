@@ -1,0 +1,5 @@
+.env
+target/CACHEDIR.TAGtests/
+Dockerfile
+scripts/
+migrations/
