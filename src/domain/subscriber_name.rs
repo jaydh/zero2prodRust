@@ -11,14 +11,6 @@ impl SubscriberName {
         let forbidden_chars = ['/', '(', '"', '<', '>', '\\', '{', '}'];
         let contains_forbidden_chars = s.chars().any(|g| forbidden_chars.contains(&g));
 
-        println!(
-            "2,{}, {},{},{}",
-            s.clone(),
-            is_empty_or_whitespace,
-            is_too_long,
-            contains_forbidden_chars
-        );
-
         if is_empty_or_whitespace || is_too_long || contains_forbidden_chars {
             Err(format!("{} is not a valid SubscriberName", s))
         } else {
