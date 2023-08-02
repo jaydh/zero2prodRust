@@ -21,6 +21,29 @@ impl TryFrom<FormData> for NewSubscriber {
     }
 }
 
+#[tracing::instrument(
+    name = "Send a confirmation email to a new subscriber",
+    skip(email_client, new_subscriber)
+)]
+pub async fn send_confirmation_email(
+    email_client: &EmailClient,
+    new_subscriber: NewSubscriber,
+) -> Result<(), reqwest::Error> {
+    let confirmation_link = "https://google.com";
+    let plain_body = &format!(
+        "Welcome to our newletter!<br /> Click <a href=\"{}\"here</a>",
+        confirmation_link
+    );
+    let html_body = &format!(
+        "Welcome to our newletter!<br /> Click <a href=\"{}\"here</a>",
+        confirmation_link
+    );
+
+    email_client
+        .send_email(new_subscriber.email, "Welcome!", &plain_body, &html_body)
+        .await
+}
+
 #[tracing::instrument(name = "Adding a new subscriber",
     skip(form, pool, email_client),
     fields(
@@ -42,13 +65,7 @@ pub async fn subscribe(
         return HttpResponse::InternalServerError().finish();
     }
 
-    if email_client
-        .send_email(
-            new_subscriber.email,
-            "Welcome!",
-            "Welcome to our newsletter",
-            "Welcome to our newsletter",
-        )
+    if send_confirmation_email(&email_client, new_subscriber)
         .await
         .is_err()
     {
@@ -69,7 +86,7 @@ pub async fn insert_subscriber(
     sqlx::query!(
         r#"
         INSERT INTO subscriptions (id, email, name, subscribed_at, status)
-        VALUES( $1, $2, $3, $4, 'confirmed')
+        VALUES( $1, $2, $3, $4, 'pending_confirmation')
     "#,
         Uuid::new_v4(),
         new_subscriber.email.as_ref(),
