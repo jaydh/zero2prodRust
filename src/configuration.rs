@@ -44,13 +44,13 @@ impl EmailClientSettings {
     }
 
     pub fn timeout(&self) -> std::time::Duration {
-        std::time::Duration::from_secs(self.timeout_milliseconds)
+        std::time::Duration::from_secs(self.timeout_milliseconds.clone())
     }
 }
 
 impl DatabaseSettings {
     pub fn without_db(&self) -> PgConnectOptions {
-        let ssl_mode = if self.require_ssl {
+        let ssl_mode = if self.require_ssl.clone() {
             PgSslMode::Require
         } else {
             PgSslMode::Prefer
@@ -59,7 +59,7 @@ impl DatabaseSettings {
             .host(&self.host)
             .username(&self.username)
             .password(self.password.expose_secret())
-            .port(self.port)
+            .port(self.port.clone())
             .ssl_mode(ssl_mode)
     }
 
