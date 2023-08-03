@@ -50,7 +50,7 @@ pub async fn send_confirmation_email(
         &format!("Welcome to our newletter!<br /> Click <a href=\"{confirmation_link}\"here</a>",);
 
     email_client
-        .send_email(new_subscriber.email, "Welcome!", &plain_body, &html_body)
+        .send_email(new_subscriber.email, "Welcome!", plain_body, html_body)
         .await
 }
 
