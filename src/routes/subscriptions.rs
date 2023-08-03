@@ -1,5 +1,6 @@
 use crate::domain::{NewSubscriber, SubscriberEmail, SubscriberName};
 use crate::email_client::EmailClient;
+use crate::startup::ApplicationBaseUrl;
 use actix_web::{web, HttpResponse};
 use chrono::Utc;
 use sqlx::PgPool;
@@ -28,16 +29,13 @@ impl TryFrom<FormData> for NewSubscriber {
 pub async fn send_confirmation_email(
     email_client: &EmailClient,
     new_subscriber: NewSubscriber,
+    base_url: &String,
 ) -> Result<(), reqwest::Error> {
-    let confirmation_link = "https://google.com";
-    let plain_body = &format!(
-        "Welcome to our newletter!<br /> Click <a href=\"{}\"here</a>",
-        confirmation_link
-    );
-    let html_body = &format!(
-        "Welcome to our newletter!<br /> Click <a href=\"{}\"here</a>",
-        confirmation_link
-    );
+    let confirmation_link = format!("{base_url}/subscriptions/confirm");
+    let plain_body =
+        &format!("Welcome to our newletter!<br /> Click <a href=\"{confirmation_link}\"here</a>",);
+    let html_body =
+        &format!("Welcome to our newletter!<br /> Click <a href=\"{confirmation_link}\"here</a>",);
 
     email_client
         .send_email(new_subscriber.email, "Welcome!", &plain_body, &html_body)
@@ -45,7 +43,7 @@ pub async fn send_confirmation_email(
 }
 
 #[tracing::instrument(name = "Adding a new subscriber",
-    skip(form, pool, email_client),
+    skip(form, pool, email_client, base_url),
     fields(
         subscriber_email = %form.email,
         subscriber_name = %form.name)
@@ -55,6 +53,7 @@ pub async fn subscribe(
     form: web::Form<FormData>,
     pool: web::Data<PgPool>,
     email_client: web::Data<EmailClient>,
+    base_url: web::Data<ApplicationBaseUrl>,
 ) -> HttpResponse {
     let new_subscriber = match form.0.try_into() {
         Ok(subscriber) => subscriber,
@@ -65,7 +64,7 @@ pub async fn subscribe(
         return HttpResponse::InternalServerError().finish();
     }
 
-    if send_confirmation_email(&email_client, new_subscriber)
+    if send_confirmation_email(&email_client, new_subscriber, &base_url.0)
         .await
         .is_err()
     {
