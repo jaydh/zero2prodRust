@@ -36,7 +36,7 @@ impl Application {
             "{}:{}",
             configuration.application.host, configuration.application.port
         );
-        let listener = TcpListener::bind(address.clone())?;
+        let listener = TcpListener::bind(address)?;
         let port = listener.local_addr().unwrap().port();
         let server = run(
             listener,
@@ -49,7 +49,7 @@ impl Application {
     }
 
     pub fn port(&self) -> u16 {
-        self.port.clone()
+        self.port
     }
 
     pub async fn run_until_stopped(self) -> Result<(), std::io::Error> {
