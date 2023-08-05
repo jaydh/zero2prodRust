@@ -1,5 +1,29 @@
 {
   "db": "PostgreSQL",
+  "09de43429c599ed825c1babf054ea395cf06840177ef522682923965f0f7b991": {
+    "describe": {
+      "columns": [],
+      "nullable": [],
+      "parameters": {
+        "Left": []
+      }
+    },
+    "query": "ALTER TABLE subscription_tokens DROP COLUMN subscription_token;"
+  },
+  "3a6e9a14e268d4c3a7e42c3505ffa4f34b40503d63429e38ddba6f6102f5b59b": {
+    "describe": {
+      "columns": [],
+      "nullable": [],
+      "parameters": {
+        "Left": [
+          "Uuid",
+          "Text",
+          "Text"
+        ]
+      }
+    },
+    "query": "INSERT INTO users (user_id, username, password_hash) VALUES ($1, $2, $3)"
+  },
   "472e7fe9ffb8bbd8973835cd350b20a57f79b07f935357c05137224b2846e97e": {
     "describe": {
       "columns": [
@@ -18,6 +42,32 @@
     },
     "query": "SELECT email FROM SUBSCRIPTIONS WHERE status = 'confirmed'"
   },
+  "6521ac307e9252d8b7ef44a36a02de4bc809beca1f5c3d0b4a25c025e1e75f0b": {
+    "describe": {
+      "columns": [
+        {
+          "name": "user_id",
+          "ordinal": 0,
+          "type_info": "Uuid"
+        },
+        {
+          "name": "password_hash",
+          "ordinal": 1,
+          "type_info": "Text"
+        }
+      ],
+      "nullable": [
+        false,
+        false
+      ],
+      "parameters": {
+        "Left": [
+          "Text"
+        ]
+      }
+    },
+    "query": "\n            SELECT user_id, password_hash FROM users WHERE username = $1\n        "
+  },
   "753c8ecfac0ea7d052e60cb582e3b3ebac5e50eb133152712ca18ab5d5e202f3": {
     "describe": {
       "columns": [],
@@ -31,26 +81,35 @@
     },
     "query": "\n    INSERT INTO subscription_tokens (subscription_token, subscriber_id)\n    VALUES ($1, $2)\n        "
   },
-  "99d381b0b0e0f0c1734bab7c61e21f02e4d403d7619cb29c56ec07e5fc6e1672": {
+  "9ab6536d2bf619381573b3bf13507d53b2e9cf50051e51c803e916f25b51abd2": {
     "describe": {
       "columns": [
         {
-          "name": "user_id",
+          "name": "email",
           "ordinal": 0,
-          "type_info": "Uuid"
+          "type_info": "Text"
+        },
+        {
+          "name": "name",
+          "ordinal": 1,
+          "type_info": "Text"
+        },
+        {
+          "name": "status",
+          "ordinal": 2,
+          "type_info": "Text"
         }
       ],
       "nullable": [
+        false,
+        false,
         false
       ],
       "parameters": {
-        "Left": [
-          "Text",
-          "Text"
-        ]
+        "Left": []
       }
     },
-    "query": "\n            SELECT user_id FROM users WHERE username = $1 AND password_hash = $2\n        "
+    "query": "SELECT email, name, status FROM subscriptions"
   },
   "ad120337ee606be7b8d87238e2bb765d0da8ee61b1a3bc142414c4305ec5e17f": {
     "describe": {
