@@ -1,5 +1,6 @@
 use crate::domain::{NewSubscriber, SubscriberEmail, SubscriberName};
 use crate::email_client::EmailClient;
+use crate::routes::error_chain_fmt;
 use crate::startup::ApplicationBaseUrl;
 use actix_web::{web, HttpResponse, ResponseError};
 use anyhow::Context;
@@ -56,19 +57,6 @@ impl std::fmt::Debug for StoreTokenError {
     }
 }
 
-fn error_chain_fmt(
-    e: &impl std::error::Error,
-    f: &mut std::fmt::Formatter<'_>,
-) -> std::fmt::Result {
-    writeln!(f, "{e}\n")?;
-    let mut current = e.source();
-    while let Some(cause) = current {
-        writeln!(f, "Caused by:\n\t{cause}")?;
-        current = cause.source();
-    }
-    Ok(())
-}
-
 fn generate_subscription_token() -> String {
     let mut rng = thread_rng();
     std::iter::repeat_with(|| rng.sample(Alphanumeric))
@@ -111,7 +99,7 @@ pub async fn send_confirmation_email(
         &format!("Welcome to our newletter!<br /> Click <a href=\"{confirmation_link}\"here</a>",);
 
     email_client
-        .send_email(new_subscriber.email, "Welcome!", plain_body, html_body)
+        .send_email(&new_subscriber.email, "Welcome!", plain_body, html_body)
         .await
 }
 
