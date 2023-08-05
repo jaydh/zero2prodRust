@@ -1,5 +1,23 @@
 {
   "db": "PostgreSQL",
+  "472e7fe9ffb8bbd8973835cd350b20a57f79b07f935357c05137224b2846e97e": {
+    "describe": {
+      "columns": [
+        {
+          "name": "email",
+          "ordinal": 0,
+          "type_info": "Text"
+        }
+      ],
+      "nullable": [
+        false
+      ],
+      "parameters": {
+        "Left": []
+      }
+    },
+    "query": "SELECT email FROM SUBSCRIPTIONS WHERE status = 'confirmed'"
+  },
   "753c8ecfac0ea7d052e60cb582e3b3ebac5e50eb133152712ca18ab5d5e202f3": {
     "describe": {
       "columns": [],
@@ -12,6 +30,27 @@
       }
     },
     "query": "\n    INSERT INTO subscription_tokens (subscription_token, subscriber_id)\n    VALUES ($1, $2)\n        "
+  },
+  "99d381b0b0e0f0c1734bab7c61e21f02e4d403d7619cb29c56ec07e5fc6e1672": {
+    "describe": {
+      "columns": [
+        {
+          "name": "user_id",
+          "ordinal": 0,
+          "type_info": "Uuid"
+        }
+      ],
+      "nullable": [
+        false
+      ],
+      "parameters": {
+        "Left": [
+          "Text",
+          "Text"
+        ]
+      }
+    },
+    "query": "\n            SELECT user_id FROM users WHERE username = $1 AND password_hash = $2\n        "
   },
   "ad120337ee606be7b8d87238e2bb765d0da8ee61b1a3bc142414c4305ec5e17f": {
     "describe": {
