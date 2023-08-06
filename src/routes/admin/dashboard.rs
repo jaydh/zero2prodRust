@@ -1,16 +1,10 @@
 use crate::session_state::TypedSession;
+use crate::utils::e500;
 use actix_web::http::header::LOCATION;
 use actix_web::{http::header::ContentType, web, HttpResponse};
 use anyhow::Context;
 use sqlx::PgPool;
 use uuid::Uuid;
-
-fn e500<T>(e: T) -> actix_web::Error
-where
-    T: std::fmt::Debug + std::fmt::Display + 'static,
-{
-    actix_web::error::ErrorInternalServerError(e)
-}
 
 pub async fn admin_dashboard(
     session: TypedSession,
@@ -50,10 +44,16 @@ pub async fn admin_dashboard(
 
 #[tracing::instrument(name = "Get username", skip(pool))]
 async fn get_username(user_id: Uuid, pool: &PgPool) -> Result<String, anyhow::Error> {
-    let row = sqlx::query!(r#"SELECT username FROM users WHERE user_id = $1"#, user_id)
-        .fetch_one(pool)
-        .await
-        .context("Failed to perform a query to retrieve a username.")?;
-
+    let row = sqlx::query!(
+        r#"
+        SELECT username
+        FROM users
+        WHERE user_id = $1
+        "#,
+        user_id,
+    )
+    .fetch_one(pool)
+    .await
+    .context("Failed to perform a query to retrieve a username.")?;
     Ok(row.username)
 }
