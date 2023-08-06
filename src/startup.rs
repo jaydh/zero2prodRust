@@ -1,7 +1,7 @@
 use crate::configuration::{DatabaseSettings, Settings};
 use crate::email_client::EmailClient;
 use crate::routes::{
-    confirm, health_check, home, login, login_form, publish_newsletter, subscribe,
+    admin_dashboard, confirm, health_check, home, login, login_form, publish_newsletter, subscribe,
 };
 use actix_session::storage::RedisSessionStore;
 use actix_session::SessionMiddleware;
@@ -22,7 +22,7 @@ pub struct Application {
 }
 
 impl Application {
-    pub async fn build(configuration: Settings) -> Result<Self, std::io::Error> {
+    pub async fn build(configuration: Settings) -> Result<Self, anyhow::Error> {
         let connection_pool = PgPoolOptions::new()
             .acquire_timeout(std::time::Duration::from_secs(2))
             .connect_lazy_with(configuration.database.with_db());
@@ -54,7 +54,8 @@ impl Application {
             configuration.application.base_url,
             configuration.application.hmac_secret,
             configuration.application.redis_uri,
-        )?;
+        )
+        .await?;
 
         Ok(Self { port, server })
     }
@@ -110,6 +111,7 @@ pub async fn run(
             .route("/", web::get().to(home))
             .route("/login", web::get().to(login_form))
             .route("/login", web::post().to(login))
+            .route("/admin/dashboard", web::get().to(admin_dashboard))
             .app_data(db_pool.clone())
             .app_data(email_client.clone())
             .app_data(base_url.clone())
