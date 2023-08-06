@@ -1,6 +1,6 @@
 {
   "db": "PostgreSQL",
-  "0b606d83801451c5b8c5fe5430c39b621d0a40b05db410aba5a757fd5cedfaf7": {
+  "33b11051e779866db9aeb86d28a59db07a94323ffdc59a5a2c1da694ebe9a65f": {
     "describe": {
       "columns": [
         {
@@ -18,7 +18,7 @@
         ]
       }
     },
-    "query": "SELECT username FROM users WHERE user_id = $1"
+    "query": "\n        SELECT username\n        FROM users\n        WHERE user_id = $1\n        "
   },
   "472e7fe9ffb8bbd8973835cd350b20a57f79b07f935357c05137224b2846e97e": {
     "describe": {
