@@ -105,8 +105,8 @@ pub async fn publish_newsletter(
     let user_id = validate_credentials(credentials, &pool)
         .await
         .map_err(|e| match e {
-            AuthError::UnexepectedError(_) => PublishError::AuthError(e.into()),
-            AuthError::InvalidCredentials(_) => PublishError::UnexpectedError(e.into()),
+            AuthError::UnexepectedError(_) => PublishError::UnexpectedError(e.into()),
+            AuthError::InvalidCredentials(_) => PublishError::AuthError(e.into()),
         })?;
     tracing::Span::current().record("user_id", &tracing::field::display(&user_id));
 
