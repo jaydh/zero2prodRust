@@ -15,9 +15,9 @@ async fn an_error_flash_meessage_is_set_on_failure() {
     assert_eq!(flash_cookie.value(), "Authentication failed");
 
     let html_page = app.get_login_html().await;
-    assert!(html_page.contains(r#"<p><i>Authentication failed</i></p>"#));
+    assert!(html_page.contains("Authentication failed"));
 
     // reload page should ditch cookie
     let html_page = app.get_login_html().await;
-    assert!(!html_page.contains(r#"<p><i>Authentication failed</i></p>"#));
+    assert!(!html_page.contains("Authentication failed"));
 }

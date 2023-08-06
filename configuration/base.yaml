@@ -1,6 +1,6 @@
 application:
   port: 8000
-  hmac_secret: "long-and-very-secret-key"
+  hmac_secret: "47dfd3c4070c965b9884ebf7c53bdc0b810a496d6baea52f538f2d9a36566891"
 database:
   host: "localhost"
   port: 5432
