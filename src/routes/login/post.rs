@@ -60,7 +60,7 @@ pub async fn login(
             };
             FlashMessage::error(e.to_string()).send();
             let response = HttpResponse::SeeOther()
-                .insert_header((LOCATION, format!("/login")))
+                .insert_header((LOCATION, "/login"))
                 .cookie(Cookie::new("_flash", e.to_string()))
                 .finish();
             Err(InternalError::from_response(e, response))
