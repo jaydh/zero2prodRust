@@ -109,6 +109,19 @@
     },
     "query": "UPDATE subscriptions SET status = 'confirmed' where id = $1"
   },
+  "eae27786a7c81ee2199fe3d5c10ac52c8067c61d6992f8f5045b908eb73bab8b": {
+    "describe": {
+      "columns": [],
+      "nullable": [],
+      "parameters": {
+        "Left": [
+          "Text",
+          "Uuid"
+        ]
+      }
+    },
+    "query": "UPDATE users SET password_hash = $1 WHERE user_id = $2"
+  },
   "f155bd8aa3d95bfd97611c683e09a7fc1f50f2946c8b0fa37ee19b9b8fed7a05": {
     "describe": {
       "columns": [],
