@@ -2,7 +2,7 @@ use actix_web::http::header::ContentType;
 use actix_web::HttpResponse;
 use actix_web_flash_messages::IncomingFlashMessages;
 
-pub async fn change_password_form(
+pub async fn publish_newsletter_form(
     flash_messages: IncomingFlashMessages,
 ) -> Result<HttpResponse, actix_web::Error> {
     let mut msg_html = String::new();
@@ -16,36 +16,36 @@ pub async fn change_password_form(
 <html lang="en">
 <head>
     <meta http-equiv="content-type" content="text/html; charset=utf-8">
-    <title>Change Password</title>
+    <title>Submit Newsletter</title>
 </head>
 <body>
     {msg_html}
-    <form action="/admin/password" method="post">
-        <label>Current password
+    <form action="/admin/newsletters" method="post">
+        <label>Title
             <input
-                type="password"
-                placeholder="Enter current password"
-                name="current_password"
+                type="text"
+                placeholder="Enter title"
+                name="title"
             >
         </label>
         <br>
-        <label>New password
+        <label>HTML
             <input
-                type="password"
-                placeholder="Enter new password"
-                name="new_password"
+                type="text"
+                placeholder="Enter html content"
+                name="html_content"
             >
         </label>
         <br>
-        <label>Confirm new password
+        <label>TEXT
             <input
-                type="password"
-                placeholder="Type the new password again"
-                name="new_password_check"
+                type="text"
+                placeholder="Enter text content"
+                name="text_content"
             >
         </label>
         <br>
-        <button type="submit">Change password</button>
+        <button type="submit">Publish Newsletter</button>
     </form>
     <p><a href="/admin/dashboard">&lt;- Back</a></p>
 </body>
